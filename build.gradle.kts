@@ -52,7 +52,6 @@ val runtimeOptional          = project.property("optional_dependencies.enabled")
 
 plugins {
     java
-    `maven-publish`
     id("fabric-loom") version("1.5-SNAPSHOT")
     id("org.cadixdev.licenser") version("0.6.1")
     id("org.ajoberstar.grgit") version("5.2.1")
@@ -274,29 +273,6 @@ tasks.jar {
             "Implementation-Timestamp" to DateTimeFormatter.ISO_DATE_TIME,
             "Maven-Artifact"           to "$modGroup:$modName:${project.version}"
         )
-    }
-}
-
-publishing {
-    publications {
-        register("mavenJava", MavenPublication::class) {
-            groupId = modGroup
-            artifactId = modName
-            version = project.version.toString()
-
-            from(components["java"])
-        }
-    }
-    repositories {
-        val mavenRelease = "https://maven.galacticraft.dev/repository/maven-releases/"
-        val mavenSnapshot = "https://maven.galacticraft.dev/repository/maven-snapshots/"
-        maven(if(prerelease) mavenSnapshot else mavenRelease) {
-            name = "maven"
-            credentials(PasswordCredentials::class)
-            authentication {
-                register("basic", BasicAuthentication::class)
-            }
-        }
     }
 }
 
